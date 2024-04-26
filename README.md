@@ -22,8 +22,9 @@ This is an Obsidian plugin that lets you effortlessly create informative Venn di
   color: rgb(0,0,255)
   opacity: 1
 ```
-
-<img src="">
+<center>
+  <img src="https://github.com/alterdekim/Interweave/blob/master/example.jpg?raw=true">
+</center>
 
 ## Syntax
 
