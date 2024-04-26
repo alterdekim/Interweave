@@ -76,3 +76,9 @@ You can also define an intersections using already known tools.
   color: "#0000FF"
   opacity: 1
 ```
+
+3. Keep it Simple!
+
+Interweave focuses on simplicity.  Properties like position (circles are automatically arranged) and border are not currently supported, but may be added in future updates.
+
+**Remember**: put everything within the \`\`\`interweave block.
