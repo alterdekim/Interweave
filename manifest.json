@@ -1,11 +1,11 @@
 {
-	"id": "sample-plugin",
-	"name": "Sample Plugin",
+	"id": "interweave-plugin",
+	"name": "Interweave",
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
-	"description": "Demonstrates some of the capabilities of the Obsidian API.",
-	"author": "Obsidian",
-	"authorUrl": "https://obsidian.md",
-	"fundingUrl": "https://obsidian.md/pricing",
+	"description": "Venn and Euler diagrams plugin.",
+	"author": "Alterdekim",
+	"authorUrl": "https://awain.net",
+	"fundingUrl": "https://awain.net",
 	"isDesktopOnly": false
 }
