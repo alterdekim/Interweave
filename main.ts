@@ -45,19 +45,29 @@ export default class MyPlugin extends Plugin {
 				var chart = venn.VennDiagram();
 				d3.select(di).datum(diagram).call(chart);
 				for( let i = 0; i < diagram.length; i++ ) {
-					const element = diagram[i];
-					const sets: string = element.sets.join("_");
+					const d_element = diagram[i];
+					d_element.color = d_element.color == undefined ? "#FF0000" : d_element.color;
+					d_element.opacity = d_element.opacity == undefined ? 0.4 : d_element.opacity;
+					const sets: string = d_element.sets.join("_");
 					window.setTimeout(function() {
-						$("."+id).find("g[data-venn-sets="+sets+"]").find("path").css({"fill-opacity": element.opacity, "fill": element.color});
-						let clr = Color.fromString(element.color);
-						const txt_obj = $("."+id).find("g[data-venn-sets=\""+sets+"\"]").find("text");
+						$("."+id).find("g")
+							.toArray()
+							.filter((element) => $(element).attr("data-venn-sets") == sets)
+							.forEach((element) => $(element).find("path").css({"fill-opacity": d_element.opacity, "fill": d_element.color}));
+						let clr = Color.fromString(d_element.color);
 						try {
 							if( clr == null ) {
 								throw new Error('Null color');
 							}
-							txt_obj.css("fill", clr.isDark() ? "#FFFFFF" : "#000000");
+							$("."+id).find("g")
+								.toArray()
+								.filter((element) => $(element).attr("data-venn-sets") == sets)
+								.forEach((element) => $(element).find("text").css("fill", clr.isDark() ? "#FFFFFF" : "#000000"));
 						} catch(e) {
-							txt_obj.css("fill", "#FFFFFF");
+							$("."+id).find("g")
+								.toArray()
+								.filter((element) => $(element).attr("data-venn-sets") == sets)
+								.forEach((element) => $(element).find("text").css("fill", "#FFFFFF"));
 						}
 					}, 80);
 				}
