@@ -4,7 +4,7 @@ This is an Obsidian plugin that lets you effortlessly create informative Venn di
 
 ## Example
 
-:::interweave
+```interweave
 - sets:
   - A
   size: 12
@@ -21,7 +21,7 @@ This is an Obsidian plugin that lets you effortlessly create informative Venn di
   size: 3
   color: rgb(0,0,255)
   opacity: 1
-:::
+```
 
 <img src="">
 
@@ -33,14 +33,14 @@ Interweave uses a clear and concise syntax similar to YAML to define your Venn d
 
 Start by listing your sets. Each set represents a group of related concepts.
 
-:::interweave
+```interweave
 - sets:
   - Name of Set
   size: 12
   color: "#FF0000"
   opacity: 1
 # You can add more sets
-:::
+```
 
 2. Customize Sets:
 
@@ -55,7 +55,7 @@ Within each set definition, you can use properties to control its appearance:
 
 You can also define an intersections using already known tools.
 
-:::interweave
+```interweave
 # Add first set.
 - sets:
   - A
@@ -75,4 +75,4 @@ You can also define an intersections using already known tools.
   size: 3
   color: "#0000FF"
   opacity: 1
-:::
+```
