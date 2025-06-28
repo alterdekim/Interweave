@@ -12,6 +12,7 @@
 	"author": "alterdekim",
 	"license": "MIT",
 	"devDependencies": {
+		"@types/chart.js": "^4.0.1",
 		"@types/jquery": "^3.5.29",
 		"@types/node": "^16.11.6",
 		"@typescript-eslint/eslint-plugin": "5.29.0",
@@ -24,11 +25,10 @@
 	},
 	"dependencies": {
 		"@bluefirex/color-ts": "^1.2.1",
-		"@types/d3": "^7.4.3",
 		"@types/js-yaml": "^4.0.9",
-		"@upsetjs/venn.js": "^1.4.2",
+		"chart.js": "^4.5.0",
+		"chartjs-chart-venn": "^4.3.5",
 		"chroma.ts": "^1.0.10",
-		"d3": "^7.9.0",
 		"jquery": "^3.7.1",
 		"js-yaml": "^4.1.0"
 	}
