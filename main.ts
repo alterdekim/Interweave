@@ -1,7 +1,5 @@
 import { Plugin } from 'obsidian';
 import * as yaml from "js-yaml";
-import $ from "jquery";
-import { Color } from '@bluefirex/color-ts';
 
 const radius: number = 80;
 
@@ -53,7 +51,61 @@ class Relation {
 	}
 }
 
+enum OperationType {
+	None,
+	Difference,
+}
+
+class SetOperationNode {
+	name: string;
+	x: number;
+	y: number;
+
+	constructor(name: string, x: number, y: number) {
+		this.name = name;
+		this.x = x;
+		this.y = y;
+	}
+}
+
+class SetOperation {
+	public a: SetOperationNode;
+	public b: SetOperationNode[];
+	public operation: OperationType;
+	public color: string;
+	public opacity: number;
+
+	constructor(a: SetOperationNode, b: SetOperationNode[], operation: OperationType, color: string, opacity: number) {
+		this.a = a;
+		this.b = b;
+		this.operation = operation;
+		this.color = color;
+		this.opacity = opacity;
+	}
+}
+
 class Renderer {
+
+	private static drawDifference(ctx: CanvasRenderingContext2D, radius: number, operation: SetOperation) {
+		ctx.beginPath();
+		for( let i = 0; i < operation.b.length; i++ ) {
+			const item = operation.b[i];
+			ctx.arc(item.x, item.y, radius, 0, Math.PI * 2);
+		}
+		ctx.arc(operation.a.x, operation.a.y, radius, 0, Math.PI * 2);
+		ctx.clip("evenodd");
+		
+		ctx.globalAlpha = operation.opacity;
+		ctx.fillStyle = operation.color;
+		ctx.beginPath();
+		ctx.arc(operation.a.x, operation.a.y, radius, 0, Math.PI * 2);
+		ctx.fill();
+		ctx.globalAlpha = 1.0;
+
+		Renderer.drawText(ctx, new Position(operation.a.x, operation.a.y), operation.a.name);
+
+		ctx.globalCompositeOperation = 'source-over';
+	}
 
 	private static drawFullCircle(ctx: CanvasRenderingContext2D, pos: Position, radius: number, color: string, alpha: number) {
 		ctx.beginPath();
@@ -111,13 +163,48 @@ class Renderer {
 
 		let pos = 0;
 
+		let set_operations: SetOperation[] = [];
+
+		let set_poses: { [name: string]: { x: number, y: number } } = {};
+
 		for( let i = 0; i < data.length; i++ ) {
 			const item = data[i];
+			if( item.sets.length == 1 ) {
+				set_poses[item.sets[0]] = poses[pos];
+				pos++;
+			}
+		}
+		
+		pos = 0;
 
+		for( let i = 0; i < data.length; i++ ) {
+			const item = data[i];
+			console.log(item);
 			if( item.sets.length == 1 ) {
 				Renderer.drawFullCircle(ctx, poses[pos], radius, item.color, item.opacity);
 				Renderer.drawText(ctx, poses[pos], item.sets[0]);
 				rendered[item.sets[0]] = new RenderObject(poses[pos], item.color);
+
+				// todo: rewrite that.
+				
+				let operationType = OperationType.None;
+				let operationSets: SetOperationNode[] = [];
+				let operationColor: string = "";
+				let operationOpacity: number = 1.0;
+
+				if( item.subtract != undefined ) {
+					operationType = OperationType.Difference;
+					for( let u = 0; u < item.subtract.sets.length; u++ ) {
+						operationSets.push(new SetOperationNode(item.subtract.sets[u], set_poses[item.subtract.sets[u]].x, set_poses[item.subtract.sets[u]].y));
+					}
+					operationColor = item.subtract.color;
+					operationOpacity = item.subtract.opacity;
+				}
+				
+				if( operationType != OperationType.None ) {
+					set_operations.push(new SetOperation(new SetOperationNode(item.sets[0], poses[pos].x, poses[pos].y), operationSets, operationType, operationColor, operationOpacity));
+				}
+
 				pos++;
 			} else {
 				let t = [];
@@ -125,6 +212,18 @@ class Renderer {
 					t.push(rendered[item.sets[u]]);
 				}
 				Renderer.drawSegment(ctx, t, radius, item.color, item.opacity);
+			}
+		}
+
+		for( let i = 0; i < set_operations.length; i++ ) {
+			const operation = set_operations[i];
+
+			switch(operation.operation) {
+				case OperationType.Difference:
+					Renderer.drawDifference(ctx, radius, operation);
+					break;
+				default:
+					break;
 			}
 		}
 	}
