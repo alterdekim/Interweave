@@ -179,7 +179,6 @@ class Renderer {
 
 		for( let i = 0; i < data.length; i++ ) {
 			const item = data[i];
-			console.log(item);
 			if( item.sets.length == 1 ) {
 				Renderer.drawFullCircle(ctx, poses[pos], radius, item.color, item.opacity);
 				Renderer.drawText(ctx, poses[pos], item.sets[0]);

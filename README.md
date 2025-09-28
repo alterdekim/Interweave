@@ -78,7 +78,36 @@ You can also define an intersections using already known tools.
   opacity: 1
 ```
 
-3. Keep it Simple!
+4. Subtraction:
+
+You can also specify a subtraction operation to highlight the difference between sets.
+
+```interweave
+- sets:
+    - A
+  subtract:
+    sets:
+      - B
+    size: 5
+    color: '#00FF00'
+    opacity: 1
+  size: 5
+  color: '#FF0000'
+  opacity: 1
+- sets:
+    - B
+  size: 5
+  color: '#0000FF'
+  opacity: 1
+- sets:
+    - A
+    - B
+  size: 5
+  color: '#00CCCC'
+  opacity: 1
+```
+
+5. Keep it Simple!
 
 Interweave focuses on simplicity.  Properties like position (circles are automatically arranged) and border are not currently supported, but may be added in future updates.
 
