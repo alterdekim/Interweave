@@ -1,6 +1,6 @@
 {
 	"name": "interweave",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"description": "Venn and Euler diagrams plugin for Obsidian (https://obsidian.md)",
 	"main": "main.js",
 	"scripts": {
