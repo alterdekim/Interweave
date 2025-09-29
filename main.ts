@@ -87,24 +87,34 @@ class SetOperation {
 class Renderer {
 
 	private static drawDifference(ctx: CanvasRenderingContext2D, radius: number, operation: SetOperation) {
-		ctx.beginPath();
+		const buffer = document.createElement('canvas');
+		buffer.width = ctx.canvas.width;
+		buffer.height = ctx.canvas.height;
+		const bctx = buffer.getContext('2d');
+
+		if( bctx == null ) return;
+
+		bctx.globalAlpha = operation.opacity;
+		bctx.fillStyle = operation.color;
+		bctx.beginPath();
+		bctx.arc(operation.a.x, operation.a.y, radius, 0, Math.PI * 2);
+		bctx.fill();
+
+		
+		bctx.globalCompositeOperation = 'destination-out';
+		
 		for( let i = 0; i < operation.b.length; i++ ) {
 			const item = operation.b[i];
-			ctx.arc(item.x, item.y, radius, 0, Math.PI * 2);
+			bctx.beginPath();
+			bctx.arc(item.x, item.y, radius, 0, Math.PI * 2);
+			bctx.fill();
 		}
-		ctx.arc(operation.a.x, operation.a.y, radius, 0, Math.PI * 2);
-		ctx.clip("evenodd");
-		
-		ctx.globalAlpha = operation.opacity;
-		ctx.fillStyle = operation.color;
-		ctx.beginPath();
-		ctx.arc(operation.a.x, operation.a.y, radius, 0, Math.PI * 2);
-		ctx.fill();
-		ctx.globalAlpha = 1.0;
+
+		bctx.globalCompositeOperation = 'source-over';
+
+		ctx.drawImage(buffer, 0, 0);
 
 		Renderer.drawText(ctx, new Position(operation.a.x, operation.a.y), operation.a.name);
-
-		ctx.globalCompositeOperation = 'source-over';
 	}
 
 	private static drawFullCircle(ctx: CanvasRenderingContext2D, pos: Position, radius: number, color: string, alpha: number) {
